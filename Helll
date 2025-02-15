@@ -1,0 +1,176 @@
+local Sigmaballs = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local Ui2corner = Instance.new("UICorner")
+
+Sigmaballs.Name = "Sigmaballs"
+Sigmaballs.Parent = game.CoreGui
+Sigmaballs.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Sigmaballs.ResetOnSpawn = false
+
+ImageButton.Name = "ImageButton"
+ImageButton.Parent = Sigmaballs
+ImageButton.Active = true
+ImageButton.Draggable = true
+ImageButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+ImageButton.BackgroundTransparency = 0.35
+ImageButton.Size = UDim2.new(0, 90, 0, 90)
+ImageButton.Image = "rbxassetid://134820707156642"
+ImageButton.Position = UDim2.new(0.5, -45, 0.5, -45)
+
+Ui2corner.CornerRadius = UDim.new(0.2, 0)
+Ui2corner.Parent = ImageButton
+
+getgenv().Wguy = {
+    Settings = {
+        Prediction = 0.04,
+        JumpOffSet = 0.06,
+        Resolver = false,
+        AimPart = "Head",
+        LockType = "index",
+        Misc = {
+            AutoReload = true,
+            AutoClicker = false,
+            Whitelist = {
+                UserWhitelist = false,
+                HwidWhitelist = true
+            },
+            AdvancedMisc = {
+                Desync = false,
+                AutoShoot = false,
+                AutoToxic = false
+            }
+        },
+        Premium = {
+            BlackList = false
+        },
+        AutoKick = {
+            Kick = false
+        },
+        Important = {
+            LookAt = true
+        },
+        AutoAir = {
+            Enabled = true,
+            Delay = 0.1
+        },
+        AntiGroundShots = true,
+        TVoe = {
+            Enabled = true,
+            EffectStrength = 0.5,
+            Offset = Vector3.new(0, 0.5, 0)
+        }
+    }
+}
+
+local enabled = false
+local Plr, ClosestPart = nil, nil
+
+local function AutoAirHandler(Velocity)
+    if getgenv().Wguy.Settings.AutoAir.Enabled then
+        return math.clamp(Velocity.Y * getgenv().Wguy.Settings.Prediction, 0.15, math.huge)
+    else
+        return 0
+    end
+end
+
+local function getAimPart(character)
+    local aimPart = getgenv().Wguy.Settings.AimPart
+    if character and character:FindFirstChild(aimPart) then
+        return character[aimPart]
+    end
+    return nil
+end
+
+local function applyTVoeEffect(Part)
+    if getgenv().Wguy.Settings.TVoe.Enabled and Part then
+        return Part.Position + getgenv().Wguy.Settings.TVoe.Offset * getgenv().Wguy.Settings.TVoe.EffectStrength
+    end
+    return Part.Position
+end
+
+local function findNearestEnemy()
+    local LocalPlayer = game.Players.LocalPlayer
+    local ClosestDistance, ClosestPlayer, ClosestPart = math.huge, nil, nil
+
+    for _, Player in pairs(game.Players:GetPlayers()) do
+        if Player ~= LocalPlayer then
+            local Character = Player.Character
+            if Character and Character:FindFirstChild("Humanoid") and Character.Humanoid.Health > 0 then
+                local Part = getAimPart(Character)
+                if Part then
+                    local Distance = (LocalPlayer.Character[getgenv().Wguy.Settings.AimPart].Position - Part.Position).Magnitude
+                    if Distance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestPart = Part
+                        ClosestDistance = Distance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer, ClosestPart
+end
+
+local function highlightRainbow(plr)
+    if plr and plr.Character then
+        for _, obj in pairs(plr.Character:GetChildren()) do
+            if obj:IsA("Highlight") then
+                obj:Destroy()
+            end
+        end
+        local highlight = Instance.new("Highlight")
+        highlight.Parent = plr.Character
+        highlight.FillTransparency = 0.5
+        highlight.OutlineTransparency = 0
+        highlight.FillColor = Color3.fromHSV(0, 1, 1)
+        highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+        spawn(function()
+            while highlight.Parent do
+                for i = 0, 360, 1 do
+                    local color = Color3.fromHSV(i / 360, 1, 1)
+                    highlight.FillColor = color
+                    wait(0.05)
+                end
+            end
+        end)
+    end
+end
+
+ImageButton.MouseButton1Click:Connect(function()
+    enabled = not enabled
+    if enabled then
+        ImageButton.Image = "rbxassetid://78342062013795"
+        Plr, ClosestPart = findNearestEnemy()
+        highlightRainbow(Plr)
+    else
+        ImageButton.Image = "rbxassetid://134820707156642"
+        if Plr and Plr.Character then
+            for _, obj in pairs(Plr.Character:GetChildren()) do
+                if obj:IsA("Highlight") then
+                    obj:Destroy()
+                end
+            end
+        end
+        Plr, ClosestPart = nil, nil
+    end
+end)
+
+local mt = getrawmetatable(game)
+local old = mt.__index
+setreadonly(mt, false)
+
+mt.__index = newcclosure(function(self, key)
+    if not checkcaller() and enabled and typeof(self) == "Instance" and self:IsA("Mouse") and key == "Hit" then
+        if Plr and Plr.Character then
+            local target = getAimPart(Plr.Character)
+            if target then
+                local Position = applyTVoeEffect(target) + (Plr.Character.Head.Velocity * getgenv().Wguy.Settings.Prediction)
+                return CFrame.new(Position)
+            end
+        end
+    end
+    return old(self, key)
+end)
+
+-- Load Rake.lua script
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Creatingtesting/Rake.LuaU/refs/heads/main/By/Ezterminals"))()
