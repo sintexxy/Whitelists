@@ -22,7 +22,7 @@ Ui2corner.Parent = ImageButton
 
 getgenv().Wguy = {
     Settings = {
-        Prediction = 0.04,
+        Prediction = 0.0052445075603,
         JumpOffSet = 0.06,
         Resolver = false,
         AimPart = "Head",
