@@ -14,7 +14,7 @@ ImageButton.Draggable = true
 ImageButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 ImageButton.BackgroundTransparency = 0.35
 ImageButton.Size = UDim2.new(0, 90, 0, 90)
-ImageButton.Image = "rbxassetid://134820707156642"
+ImageButton.Image = "rbxassetid://140623923630784" -- Lock OFF image
 ImageButton.Position = UDim2.new(0.5, -45, 0.5, -45)
 
 Ui2corner.CornerRadius = UDim.new(0.2, 0)
@@ -22,7 +22,7 @@ Ui2corner.Parent = ImageButton
 
 getgenv().snm = {
     Settings = {
-        Prediction = 0.042937231458024,
+        Prediction = 0.07, -- Improved prediction
         JumpOffSet = 0.06,
         Resolver = false,
         AimPart = "Head",
@@ -135,7 +135,7 @@ local function highlightRainbow(plr)
         
         spawn(function()
             while highlight.Parent do
-                for i = 0, 360, 5 do -- Faster color shift
+                for i = 0, 360, 5 do
                     highlight.FillColor = Color3.fromHSV(i / 360, 1, 1)
                     wait(0.03)
                 end
@@ -147,14 +147,14 @@ end
 ImageButton.MouseButton1Click:Connect(function()
     enabled = not enabled
     if enabled then
-        ImageButton.Image = "rbxassetid://78342062013795"
+        ImageButton.Image = "rbxassetid://96086736054343" -- Lock ON image
         Plr, ClosestPart = findNearestEnemy()
         if Plr then
             highlightRainbow(Plr)
             sendNotification("Locked onto: " .. Plr.DisplayName)
         end
     else
-        ImageButton.Image = "rbxassetid://134820707156642"
+        ImageButton.Image = "rbxassetid://140623923630784" -- Lock OFF image
         if Plr and Plr.Character then
             for _, obj in pairs(Plr.Character:GetChildren()) do
                 if obj:IsA("Highlight") then
