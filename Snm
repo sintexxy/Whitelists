@@ -22,7 +22,7 @@ Ui2corner.Parent = ImageButton
 
 getgenv().snm = {
     Settings = {
-        Prediction = 0.07, -- Improved prediction
+        Prediction = 0.00525, -- Improved prediction
         JumpOffSet = 0.06,
         Resolver = false,
         AimPart = "Head",
