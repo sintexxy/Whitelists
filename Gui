@@ -1,0 +1,127 @@
+
+ 
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuarmorIsGay5/automatic-spork/refs/heads/main/Library.txt",true))()
+
+
+
+
+local Window = Library:Window({Name = string.format("Snm.tech"), Amount = 5})
+
+
+local Indicator = Library:Indicator({Name = "New Indicator"})
+-- Indicator Options
+local TextIndicator = Indicator:NewValue({Name = "New Text", Value = "value here"})
+local BarIndicator = Indicator:NewBar({Name = "New Bar", Value = 10, Min = 0, Max = 100})
+--
+local Tab = Window:Page({Name = "Combat", Weapons = true})
+local Tab1 = Window:Page({Name = "Rage", Weapons = true})
+Window:Page({Name = "Miscellaneous"})
+local Settings = Window:Page({Name = "Settings"})
+--
+local Page = Tab:Weapon({Icon = "rbxassetid://88836741434398"})
+local Page1 = Tab:Weapon({Icon = "rbxassetid://106397886212631"})
+
+local Page2 = Tab:Weapon({Icon = "rbxassetid://113531571097970"})
+local Page3 = Tab:Weapon({Icon = "rbxassetid://138737595020251"})
+
+--[[ http://www.roblox.com/asset/?id=17677463033
+
+Ak47 : rbxassetid://88836741434398
+
+REV : rbxassetid://106397886212631
+
+SG : 118698023926650
+
+Snipah : 104037274406938
+
+138737595020251
+
+113531571097970
+
+]]
+
+
+-- Sections
+local Section = Page:Section({Name = "Target Aim", Side = "Left"})
+local Section1 = Page:Section({Name = "Checks", Side = "Right"})
+local Section2 = Page:Section({Name = "Bullet tp", Side = "Left"})
+local Section3 = Page:Section({Name = "Resolver", Side = "Right"})
+local Section4 = Page3:Section({Name = "Gun Settings", Side = "Right"})
+
+
+Section:Toggle({
+    Name = "Target aim",
+    Callback = function(a)
+
+    end
+})
+
+Section:Textbox({
+    Name = "X Prediction",
+    Default = "0",
+    Callback = function(a)
+        
+    end
+})
+
+Section:Textbox({
+    Name = "Y Prediction",
+    Default = "0",
+    Callback = function(a)
+        
+    end
+})
+
+Section:Textbox({
+    Name = "JumpOffset",
+    Default = "0",
+    Callback = function(a)
+        
+    end
+})
+
+Section:List({
+    Name = "Hitpart",
+    Options = {
+        "Head", "HumanoidRootPart", "UpperTorso", "LowerTorso", 
+        "LeftUpperArm", "LeftLowerArm", "LeftHand", 
+        "RightUpperArm", "RightLowerArm", "RightHand", 
+        "LeftUpperLeg", "LeftLowerLeg", "LeftFoot", 
+        "RightUpperLeg", "RightLowerLeg", "RightFoot"
+    },
+    Default = "HumanoidRootPart",
+    Callback = function(a)
+        
+    end
+})
+
+Section:Button({
+    Name = "Load Button",
+    Callback = function()
+        
+    end
+})
+
+Section:Slider({
+    Name = 'Button size',
+    Default = 70,
+    Min = 50,
+    Max = 300,
+    Callback = function(a)
+        
+    end
+})
+
+Section1:Toggle({
+    Name = "Enabled",
+    Callback = function(a)
+
+    end
+})
+
+Section1:Toggle({
+    Name = "KO check",
+    Callback = function(a)
+
+    end
+})
